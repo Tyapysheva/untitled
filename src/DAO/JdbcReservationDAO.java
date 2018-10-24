@@ -17,46 +17,40 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
 
     @Override
     public List<Reservation> getALL() throws SQLException {
-        Connection connection = this.connectionSupplier.get();
-        String sql;
-        sql = "SELECT * FROM reservation";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet =statement.executeQuery(sql) ;
+        String sql = "SELECT * FROM reservation";
+        try (Connection connection = this.connectionSupplier.get();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
-        while (resultSet.next()) {
-            int id = resultSet.getInt("id");
-            Time time = resultSet.getTime("time");
-            int row = resultSet.getInt("row");
-            int col = resultSet.getInt("col");
-            String user = resultSet.getString("user");
-
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                Time time = resultSet.getTime("time");
+                int row = resultSet.getInt("row");
+                int col = resultSet.getInt("col");
+                String user = resultSet.getString("user");
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return null;
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return null;
     }
 
     @Override
     public boolean reservPlace(Reservation r) throws SQLException {
-        Connection connection = this.connectionSupplier.get();
-        String sql;
-        sql = "Update reservation SET user=? AND time=? WHERE row=? AND col=? ";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet =statement.executeQuery(sql) ;
+        String sql = "Update reservation SET user=? AND time=? WHERE row=? AND col=? ";
+        try (Connection connection = this.connectionSupplier.get();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
-        while (resultSet.next()) {
-            int id = resultSet.getInt("id");
-            Time time = resultSet.getTime("time");
-            int row = resultSet.getInt("row");
-            int col = resultSet.getInt("col");
-            String user = resultSet.getString("user");
 
-        }
-        resultSet.close();
-        statement.close();
-        connection.close();
+            resultSet.close();
+            statement.close();
+            connection.close();
             return false;
         }
     }
+
+}
+
 
