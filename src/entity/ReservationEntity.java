@@ -5,22 +5,22 @@ import java.time.LocalDateTime;
 
 public class ReservationEntity implements Reservation {
     private int id;
-    private LocalDateTime time;
+    private LocalDateTime timed;
     private int row;
     private int column;
-    private String user;
+    private String userd;
 
     public ReservationEntity(int id, LocalDateTime time, int row, int column, String user) {
         this.id = id;
-        this.time = time;
+        this.timed = time;
         this.row = row;
         this.column = column;
-        this.user = user;
+        this.userd = user;
     }
 
     @Override
-    public LocalDateTime time() {
-        return time;
+    public LocalDateTime timed() {
+        return timed;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ReservationEntity implements Reservation {
     }
 
     @Override
-    public String user() {
-        return user;
+    public String userd() {
+        return userd;
     }
 }
