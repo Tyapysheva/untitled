@@ -4,18 +4,18 @@ import java.time.LocalDateTime;
 
 
 public class ReservationEntity implements Reservation {
-    private int id;
+    private long id;
     private LocalDateTime timed;
-    private int row;
-    private int column;
     private String userd;
+    private int sequence;
+    private CinemaRoom cinemaRoom;
 
-    public ReservationEntity(int id, LocalDateTime time, int row, int column, String user) {
+    public ReservationEntity(int id, LocalDateTime time, int sequence, CinemaRoom cinemaRoom, String user) {
         this.id = id;
         this.timed = time;
-        this.row = row;
-        this.column = column;
         this.userd = user;
+        this.sequence = sequence;
+        this.cinemaRoom = cinemaRoom;
     }
 
     @Override
@@ -24,17 +24,19 @@ public class ReservationEntity implements Reservation {
     }
 
     @Override
-    public int row() {
-        return row;
-    }
-
-    @Override
-    public int column() {
-        return column;
-    }
-
-    @Override
     public String userd() {
-        return userd;
+        return null;
     }
+
+    @Override
+    public int sequence() {
+        return sequence;
+    }
+
+    @Override
+    public CinemaRoom cinemaRoom() {
+        return cinemaRoom;
+    }
+
+
 }

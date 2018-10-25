@@ -1,6 +1,6 @@
 package entity;
 
 public interface CinemaRoom {
-    int row();
-    int col();
+    int totalRow();
+    int totalCol();
 }

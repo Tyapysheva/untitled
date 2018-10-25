@@ -2,23 +2,22 @@ package entity;
 
 public class CinemaRoomEntity implements CinemaRoom {
 
-    int id;
-    int row;
-    int col;
+    long id;
+    int totalRow;
+    int totalCol;
 
-    public CinemaRoomEntity(int id, int row, int col) {
+    public CinemaRoomEntity(int id, int totalRow, int totalCol) {
         this.id = id;
-        this.row = row;
-        this.col = col;
+        this.totalRow = totalRow;
+        this.totalCol = totalCol;
+    }
+    @Override
+    public int totalRow() {
+        return totalRow;
     }
 
     @Override
-    public int row() {
-        return row;
-    }
-
-    @Override
-    public int col() {
-        return col;
+    public int totalCol() {
+        return totalCol;
     }
 }
