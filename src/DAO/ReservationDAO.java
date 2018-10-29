@@ -9,4 +9,5 @@ import java.util.List;
 public interface ReservationDAO{
     List<Reservation> getALL() throws SQLException;
     boolean reservPlace(Reservation r) throws SQLException;
+
 }

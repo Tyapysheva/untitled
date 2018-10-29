@@ -1,5 +1,7 @@
 package DAO;
 
+import entity.CinemaRoom;
+import entity.CinemaRoomEntity;
 import entity.Reservation;
 import entity.ReservationEntity;
 
@@ -13,26 +15,27 @@ import java.util.function.Supplier;
 public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
 
     LocalDateTime localDateTime = LocalDateTime.now();
-
+    Reservation r;
     public JdbcReservationDAO(Supplier<Connection> connectionSupplier) {
         super(connectionSupplier);
     }
 
     @Override
     public List<Reservation> getALL() throws SQLException {
-        Reservation r;
+
         List<Reservation> reservationList =new ArrayList<Reservation>();
         String sql = "SELECT * FROM reservation";
         try (Connection connection = this.connectionSupplier.get();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
                 Timestamp timed = resultSet.getTimestamp("timed");
-                int row = resultSet.getInt("row");
-                int col = resultSet.getInt("col");
                 String userd = resultSet.getString("userd");
-                r = new ReservationEntity(id,timed.toLocalDateTime(),row,col,userd);
+                int sequence = resultSet.getInt("sequence_place");
+                String nameRoom = resultSet.getString("name_room");
+                int row = resultSet.getInt("total_row");
+                int col = resultSet.getInt("total_col");
+                r = new ReservationEntity(timed.toLocalDateTime(), sequence, new CinemaRoomEntity(nameRoom,row,col), userd);
                 reservationList.add(r);
             }
             return reservationList;
@@ -49,15 +52,15 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
              PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
              PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
              ResultSet resultSet = preparedStatement1.executeQuery()) {
-            preparedStatement1.setInt(1, r.row());
-            preparedStatement1.setInt(2, r.column());
+           // preparedStatement1.setInt(1, r.row());
+           // preparedStatement1.setInt(2, r.column());
             while (resultSet.next()) {
 
                 if (resultSet.getString("userd") == null) {
                     preparedStatement2.setString(1, r.userd());
                     preparedStatement2.setTimestamp(2, Timestamp.valueOf(r.timed()));
-                    preparedStatement2.setInt(3, r.row());
-                    preparedStatement2.setInt(4, r.column());
+                  //  preparedStatement2.setInt(3, r.row());
+                  //  preparedStatement2.setInt(4, r.column());
                     preparedStatement2.executeUpdate();
                 }
             }

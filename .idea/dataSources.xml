@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="reservation_system@localhost" uuid="ad160418-8ea3-4686-a0f0-9d1b1bdfbd5c">
+    <data-source source="LOCAL" name="reservation_cinema_place@localhost" uuid="e3a62ed6-e863-459c-b8a9-c35ad3b8963f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/reservation_system</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/reservation_cinema_place</jdbc-url>
+      <driver-properties>
+        <property name="protocolVersion" value="3" />
+        <property name="loggerLevel" value="DEBUG" />
+      </driver-properties>
     </data-source>
   </component>
 </project>
