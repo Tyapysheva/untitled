@@ -4,6 +4,7 @@ import entity.Reservation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ReservationService extends JdbcReservationDAO {
@@ -13,7 +14,7 @@ public class ReservationService extends JdbcReservationDAO {
     }
 
     @Override
-    public List<Reservation> getALL() throws SQLException {
+    public Map<String, List<Reservation>> getALL() throws SQLException {
 
         return super.getALL();
     }

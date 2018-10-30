@@ -12,6 +12,9 @@ public class CinemaRoomEntity implements CinemaRoom {
         this.totalRow = totalRow;
         this.totalCol = totalCol;
     }
+    public CinemaRoomEntity(String nameRoom) {
+        this.nameRoom=nameRoom;
+    }
     @Override
     public String name() { return nameRoom; }
 

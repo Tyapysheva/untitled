@@ -10,11 +10,11 @@ public class ReservationEntity implements Reservation {
     private int sequence;
     private CinemaRoom cinemaRoom;
 
-    public ReservationEntity( LocalDateTime time, int sequence, CinemaRoom cinemaRoom, String user) {
+    public ReservationEntity( LocalDateTime time, int sequence, String user) {
         this.timed = time;
         this.userd = user;
         this.sequence = sequence;
-        this.cinemaRoom = cinemaRoom;
+
     }
 
     @Override

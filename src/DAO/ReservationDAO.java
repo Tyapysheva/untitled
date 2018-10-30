@@ -4,10 +4,11 @@ import entity.Reservation;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 public interface ReservationDAO{
-    List<Reservation> getALL() throws SQLException;
+    Map<String,List<Reservation>> getALL() throws SQLException;
     boolean reservPlace(Reservation r) throws SQLException;
 
 }
