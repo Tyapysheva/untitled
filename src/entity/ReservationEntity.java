@@ -24,7 +24,7 @@ public class ReservationEntity implements Reservation {
 
     @Override
     public String userd() {
-        return null;
+        return userd;
     }
 
     @Override
@@ -37,5 +37,8 @@ public class ReservationEntity implements Reservation {
         return cinemaRoom;
     }
 
-
+    @Override
+    public String toString() {
+        return "Посетитель: "+userd()+"| Время: "+timed()+"| Место: "+sequence();
+    }
 }

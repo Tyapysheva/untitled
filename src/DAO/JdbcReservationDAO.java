@@ -18,38 +18,36 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
 
     LocalDateTime localDateTime = LocalDateTime.now();
     Reservation r;
+
     public JdbcReservationDAO(Supplier<Connection> connectionSupplier) {
         super(connectionSupplier);
     }
 
     @Override
     public Map<String, List<Reservation>> getALL() throws SQLException {
-        List<Reservation> reservationList =new ArrayList<Reservation>();
-        Map<String, List<Reservation>> reservationHM =new HashMap<String, List<Reservation>>();
 
-
-        String sql = "SELECT timed,userd, sequence_place, name_room "+
+        Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
+        String sql = "SELECT timed,userd, sequence_place, name_room " +
                 " FROM reservation INNER JOIN cinema_room ON reservation.id_cinema_room=cinema_room.id ";
-
         try (Connection connection = this.connectionSupplier.get();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
-
             while (resultSet.next()) {
+                List<Reservation> reservationList = new ArrayList<Reservation>();
                 String nameRoom = resultSet.getString("name_room");
                 Timestamp timed = resultSet.getTimestamp("timed");
                 String userd = resultSet.getString("userd");
                 int sequence = resultSet.getInt("sequence_place");
                 r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd);
-                if(reservationHM.containsKey(nameRoom)) {
 
-                    reservationHM.get(nameRoom).add(r);
-                }
-                else
-                {
+                if (reservationHM.containsKey(nameRoom)) {
+                    reservationList = reservationHM.get(nameRoom);
+
+                } else {
+                    reservationList = new ArrayList<>();
                     reservationHM.put(nameRoom, reservationList);
                 }
-
+                reservationList.add(r);
             }
             return reservationHM;
         }
@@ -63,8 +61,8 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
 
         try (Connection connection = this.connectionSupplier.get();
              PreparedStatement preparedStatement2 = connection.prepareStatement(sql2)) {
-           // preparedStatement1.setInt(1, r.row());
-           // preparedStatement1.setInt(2, r.column());
+            // preparedStatement1.setInt(1, r.row());
+            // preparedStatement1.setInt(2, r.column());
 
             preparedStatement2.setTimestamp(1, Timestamp.valueOf(localDateTime));
             preparedStatement2.setString(2, "Borsh");

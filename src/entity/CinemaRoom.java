@@ -1,7 +1,7 @@
 package entity;
 
 public interface CinemaRoom {
-    String name();
+    String nameRoom();
     int totalRow();
     int totalCol();
 }

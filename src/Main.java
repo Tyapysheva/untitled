@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class Main  {
+public class Main {
 
     private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/reservation_cinema_place";
     private static final String USER = "postgres";
@@ -53,9 +53,7 @@ public class Main  {
 //        }
 
 
-        Reservation r;
-        List<Reservation> reservationList =new ArrayList<Reservation>();
-        Map<String, List<Reservation>> reservationHM =new HashMap<String, List<Reservation>>();
+
 
         String sql = "SELECT timed,userd, sequence_place, name_room" +
                 " FROM reservation INNER JOIN cinema_room ON reservation.id_cinema_room=cinema_room.id";
@@ -63,27 +61,31 @@ public class Main  {
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
-            while (resultSet.next()) {
-                String nameRoom = resultSet.getString("name_room");
+            Reservation r;
+            Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
 
+            while (resultSet.next()) {
+                List<Reservation> reservationList = new ArrayList<Reservation>();
+                String nameRoom = resultSet.getString("name_room");
                 Timestamp timed = resultSet.getTimestamp("timed");
                 String userd = resultSet.getString("userd");
                 int sequence = resultSet.getInt("sequence_place");
                 r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd);
+                if (reservationHM.containsKey(nameRoom)) {
+                    reservationList = reservationHM.get(nameRoom);
 
-                if(reservationHM.containsKey(nameRoom)) {
-
-                    reservationHM.get(nameRoom).add(r);
-                }
-                else
-                {
-                    reservationList =new ArrayList<>();
-                    reservationList.add(r);
+                } else {
+                    reservationList = new ArrayList<>();
                     reservationHM.put(nameRoom, reservationList);
                 }
-
+                reservationList.add(r);
             }
-            System.out.println(reservationHM.values());
+            for (Map.Entry<String, List<Reservation>> entry : reservationHM.entrySet()) {
+                System.out.println(entry.getKey());
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    System.out.println(entry.getValue().get(i));
+                }
+            }
         }
     }
 
