@@ -1,16 +1,16 @@
 import DAO.JdbcDAO;
 import DAO.JdbcReservationDAO;
+import DAO.ResultSetIterator;
 import entity.Reservation;
 import entity.ReservationEntity;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -18,11 +18,24 @@ public class Main {
     private static final String USER = "postgres";
     private static final String PASSWORD = "123456";
 
-
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
+        ArrayList<Integer> p = new ArrayList<Integer>();
+        ArrayList<Integer> m = new ArrayList<Integer>();
+
+
+//        List n =Stream.of(-2,1, 2, -2, -2,2,10)
+//                .collect(Collectors.partitioningBy(x->x>0,Collectors.summingInt(value -> value)))
+//                .entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+//
+//        System.out.println(n);
+
+
+
+
         Class.forName("org.postgresql.Driver");
         LocalDateTime localDateTime = LocalDateTime.now();
-
+//
 //        String sql1 = "SELECT * FROM reservation_cinema          WHERE EXISTS\n" +
 //                "                      ( SELECT *\n" +
 //                "                          FROM reservation\n" +
@@ -58,32 +71,39 @@ public class Main {
         String sql = "SELECT timed,userd, sequence_place, name_room" +
                 " FROM reservation INNER JOIN cinema_room ON reservation.id_cinema_room=cinema_room.id";
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+             ResultSet resultSet=statement.executeQuery();
+             Reservation r;
+             ResultSetIterator<Reservation> s;
+            s = new ResultSetIterator<Reservation>(resultSet, (ResultSet resultSet1) -> new ReservationEntity() );
 
-            Reservation r;
+
             Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
+            List<Reservation> reservationList = new ArrayList<Reservation>();
 
-            while (resultSet.next()) {
-                List<Reservation> reservationList = new ArrayList<Reservation>();
-                String nameRoom = resultSet.getString("name_room");
-                Timestamp timed = resultSet.getTimestamp("timed");
-                String userd = resultSet.getString("userd");
-                int sequence = resultSet.getInt("sequence_place");
-                r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd);
-                if (reservationHM.containsKey(nameRoom)) {
-                    reservationList = reservationHM.get(nameRoom);
+            while (s.hasNext()) {
 
-                } else {
-                    reservationList = new ArrayList<>();
-                    reservationHM.put(nameRoom, reservationList);
-                }
-                reservationList.add(r);
+            System.out.println(s.next());
+
+
+//                String nameRoom = resultSet.getString("name_room");
+//                Timestamp timed = resultSet.getTimestamp("timed");
+//                String userd = resultSet.getString("userd");
+//                int sequence = resultSet.getInt("sequence_place");
+//                r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd);
+//                if (reservationHM.containsKey(nameRoom)) {
+//                    reservationList = reservationHM.get(nameRoom);
+//
+//                } else {
+//                    reservationList = new ArrayList<>();
+//                    reservationHM.put(nameRoom, reservationList);
+//                }
+//                reservationList.add(r);
             }
             for (Map.Entry<String, List<Reservation>> entry : reservationHM.entrySet()) {
-                System.out.println(entry.getKey());
+               // System.out.println(entry.getKey());
                 for (int i = 0; i < entry.getValue().size(); i++) {
-                    System.out.println(entry.getValue().get(i));
+                   // System.out.println(entry.getValue().get(i));
                 }
             }
         }

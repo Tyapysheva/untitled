@@ -31,7 +31,9 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
                 " FROM reservation INNER JOIN cinema_room ON reservation.id_cinema_room=cinema_room.id ";
         try (Connection connection = this.connectionSupplier.get();
              PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+             ResultSet resultSet = statement.executeQuery())
+
+        {
             while (resultSet.next()) {
                 List<Reservation> reservationList = new ArrayList<Reservation>();
                 String nameRoom = resultSet.getString("name_room");

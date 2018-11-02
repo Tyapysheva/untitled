@@ -16,6 +16,8 @@ public class ReservationEntity implements Reservation {
         this.sequence = sequence;
 
     }
+    public ReservationEntity() {
+    }
 
     @Override
     public LocalDateTime timed() {
