@@ -1,5 +1,6 @@
 import DAO.ResultSetIterator;
 import entity.CinemaRoom;
+import entity.CinemaRoomEntity;
 import entity.Reservation;
 import entity.ReservationEntity;
 
@@ -67,16 +68,17 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
-            String nameRoom = resultSet.getString("name_room");
             Reservation r;
             Iterator<Reservation> s;
             s = new ResultSetIterator<Reservation>(resultSet, resultSet1 -> {
                 try {
-                    return new ReservationEntity(resultSet1
-                            .getTimestamp("timed")
-                            .toLocalDateTime(), resultSet1
-                            .getInt("sequence_place"), resultSet1
-                            .getString("userd"));
+                    String nameRoom = resultSet1.getString("name_room");
+                     Timestamp timed = resultSet1.getTimestamp("timed");
+                    String userd = resultSet1.getString("userd");
+                    int sequence = resultSet1.getInt("sequence_place");
+                    return new ReservationEntity(timed.toLocalDateTime(), sequence, userd, nameRoom);
+
+
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -89,7 +91,7 @@ public class Main {
          Stream<Reservation> stream = StreamSupport.stream(spliterator, false);
 
          Map<String,List<Reservation>> map;
-            map = stream.collect(Collectors.groupingBy());
+            map = stream.collect(Collectors.groupingBy(x->x.nameRoom()));
             System.out.println(map);
 
          //   while (s.hasNext()) {

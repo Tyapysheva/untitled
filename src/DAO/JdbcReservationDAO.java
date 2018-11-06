@@ -40,7 +40,7 @@ public class JdbcReservationDAO extends JdbcDAO implements ReservationDAO {
                 Timestamp timed = resultSet.getTimestamp("timed");
                 String userd = resultSet.getString("userd");
                 int sequence = resultSet.getInt("sequence_place");
-                r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd);
+                r = new ReservationEntity(timed.toLocalDateTime(), sequence, userd,nameRoom);
 
                 if (reservationHM.containsKey(nameRoom)) {
                     reservationList = reservationHM.get(nameRoom);

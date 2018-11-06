@@ -8,15 +8,15 @@ public class ReservationEntity implements Reservation {
     private LocalDateTime timed;
     private String userd;
     private int sequence;
-    private CinemaRoom cinemaRoom;
+    private String nameRoom;
 
 
 
-    public ReservationEntity( LocalDateTime time, int sequence, String userd ) {
+    public ReservationEntity( LocalDateTime time, int sequence, String userd,String nameRoom ) {
         this.timed = time;
         this.userd = userd;
         this.sequence = sequence;
-
+        this.nameRoom = nameRoom;
     }
     public ReservationEntity() {
     }
@@ -37,12 +37,12 @@ public class ReservationEntity implements Reservation {
     }
 
     @Override
-    public CinemaRoom cinemaRoom() {
-        return cinemaRoom;
+    public String nameRoom() {
+        return nameRoom;
     }
 
     @Override
     public String toString() {
-        return "Посетитель: "+userd()+"| Время: "+timed()+"| Место: "+sequence();
+        return "\n\t\t"+"Посетитель: "+userd()+"\t|\tВремя: "+timed()+"\t|\tМесто: "+sequence()+"\n";
     }
 }
