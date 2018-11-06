@@ -1,5 +1,3 @@
-import DAO.JdbcDAO;
-import DAO.JdbcReservationDAO;
 import DAO.ResultSetIterator;
 import entity.Reservation;
 import entity.ReservationEntity;
@@ -7,10 +5,8 @@ import entity.ReservationEntity;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Main {
 
@@ -29,8 +25,6 @@ public class Main {
 //                .entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
 //
 //        System.out.println(n);
-
-
 
 
         Class.forName("org.postgresql.Driver");
@@ -66,24 +60,30 @@ public class Main {
 //        }
 
 
-
-
         String sql = "SELECT timed,userd, sequence_place, name_room" +
                 " FROM reservation INNER JOIN cinema_room ON reservation.id_cinema_room=cinema_room.id";
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-             ResultSet resultSet=statement.executeQuery();
-             Reservation r;
-             ResultSetIterator<Reservation> s;
-            s = new ResultSetIterator<Reservation>(resultSet, (ResultSet resultSet1) -> new ReservationEntity() );
+            ResultSet resultSet = statement.executeQuery();
+            Reservation r;
+            Iterator<Reservation> s;
+            s = new ResultSetIterator<Reservation>(resultSet, resultSet1 -> {
+                try {
+                    return new ReservationEntity(resultSet1.getTimestamp("timed").toLocalDateTime(), resultSet1.getInt("sequence_place"), resultSet1.getString("userd"));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
+            });
+
+    
 
             Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
             List<Reservation> reservationList = new ArrayList<Reservation>();
 
             while (s.hasNext()) {
 
-            System.out.println(s.next());
+                System.out.println(s.next());
 
 
 //                String nameRoom = resultSet.getString("name_room");
@@ -100,13 +100,15 @@ public class Main {
 //                }
 //                reservationList.add(r);
             }
-            for (Map.Entry<String, List<Reservation>> entry : reservationHM.entrySet()) {
-               // System.out.println(entry.getKey());
-                for (int i = 0; i < entry.getValue().size(); i++) {
-                   // System.out.println(entry.getValue().get(i));
-                }
-            }
+//            for (Map.Entry<String, List<Reservation>> entry : reservationHM.entrySet()) {
+//               // System.out.println(entry.getKey());
+//                for (int i = 0; i < entry.getValue().size(); i++) {
+//                   // System.out.println(entry.getValue().get(i));
+//                }
         }
     }
 
 }
+
+
+
