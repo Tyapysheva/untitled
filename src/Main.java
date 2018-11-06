@@ -1,10 +1,12 @@
 import DAO.ResultSetIterator;
+import entity.CinemaRoom;
 import entity.Reservation;
 import entity.ReservationEntity;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -65,26 +67,37 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
+            String nameRoom = resultSet.getString("name_room");
             Reservation r;
             Iterator<Reservation> s;
             s = new ResultSetIterator<Reservation>(resultSet, resultSet1 -> {
                 try {
-                    return new ReservationEntity(resultSet1.getTimestamp("timed").toLocalDateTime(), resultSet1.getInt("sequence_place"), resultSet1.getString("userd"));
+                    return new ReservationEntity(resultSet1
+                            .getTimestamp("timed")
+                            .toLocalDateTime(), resultSet1
+                            .getInt("sequence_place"), resultSet1
+                            .getString("userd"));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
 
             });
 
-    
 
-            Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
-            List<Reservation> reservationList = new ArrayList<Reservation>();
+         Spliterator<Reservation> spliterator = Spliterators.spliteratorUnknownSize(
+                 s, Spliterator.NONNULL);
+         Stream<Reservation> stream = StreamSupport.stream(spliterator, false);
 
-            while (s.hasNext()) {
+         Map<String,List<Reservation>> map;
+            map = stream.collect(Collectors.groupingBy());
+            System.out.println(map);
 
-                System.out.println(s.next());
+         //   while (s.hasNext()) {
 
+
+
+//               Map<String, List<Reservation>> reservationHM = new HashMap<String, List<Reservation>>();
+//               List<Reservation> reservationList = new ArrayList<Reservation>();
 
 //                String nameRoom = resultSet.getString("name_room");
 //                Timestamp timed = resultSet.getTimestamp("timed");
@@ -105,7 +118,7 @@ public class Main {
 //                for (int i = 0; i < entry.getValue().size(); i++) {
 //                   // System.out.println(entry.getValue().get(i));
 //                }
-        }
+      //  }
     }
 
 }
