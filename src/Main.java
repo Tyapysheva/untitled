@@ -72,11 +72,11 @@ public class Main {
             Iterator<Reservation> s;
             s = new ResultSetIterator<Reservation>(resultSet, resultSet1 -> {
                 try {
-                    String nameRoom = resultSet1.getString("name_room");
+                    CinemaRoom cr = new CinemaRoomEntity(resultSet1.getString("name_room"));
                      Timestamp timed = resultSet1.getTimestamp("timed");
                     String userd = resultSet1.getString("userd");
                     int sequence = resultSet1.getInt("sequence_place");
-                    return new ReservationEntity(timed.toLocalDateTime(), sequence, userd, nameRoom);
+                    return new ReservationEntity(timed.toLocalDateTime(), sequence, userd, cr );
 
 
                 } catch (SQLException e) {
@@ -91,7 +91,7 @@ public class Main {
          Stream<Reservation> stream = StreamSupport.stream(spliterator, false);
 
          Map<String,List<Reservation>> map;
-            map = stream.collect(Collectors.groupingBy(x->x.nameRoom()));
+            map = stream.collect(Collectors.groupingBy(x->x.cinemaRoom().nameRoom()));
             System.out.println(map);
 
          //   while (s.hasNext()) {

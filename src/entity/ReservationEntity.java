@@ -8,15 +8,15 @@ public class ReservationEntity implements Reservation {
     private LocalDateTime timed;
     private String userd;
     private int sequence;
-    private String nameRoom;
+    private CinemaRoom cinemaRoom;
 
 
 
-    public ReservationEntity( LocalDateTime time, int sequence, String userd,String nameRoom ) {
+    public ReservationEntity( LocalDateTime time, int sequence, String userd,CinemaRoom cinemaRoom ) {
         this.timed = time;
         this.userd = userd;
         this.sequence = sequence;
-        this.nameRoom = nameRoom;
+        this.cinemaRoom=cinemaRoom;
     }
     public ReservationEntity() {
     }
@@ -37,8 +37,8 @@ public class ReservationEntity implements Reservation {
     }
 
     @Override
-    public String nameRoom() {
-        return nameRoom;
+    public CinemaRoom cinemaRoom() {
+        return cinemaRoom;
     }
 
     @Override

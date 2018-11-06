@@ -6,5 +6,5 @@ public interface Reservation {
     LocalDateTime timed();
     String userd();
     int sequence();
-    String nameRoom();
+    CinemaRoom cinemaRoom();
 }
